@@ -2,6 +2,7 @@ package component
 
 import (
 	"fmt"
+
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -32,4 +33,5 @@ func SwitchPage(newPage string) {
 	if p == nil {
 		panic(fmt.Sprintf("No page defined for '%s'", newPage))
 	}
+	ActivePage = p
 }
