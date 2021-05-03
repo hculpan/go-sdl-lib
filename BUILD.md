@@ -1,5 +1,11 @@
 # Building this project
 
+## Dependencies
+
+This project requires Go 1.16+ (it uses the 'embed' package which was introduced in 1.16; otherwise the code is compatible with earlier version.).
+
+It will require a valid install of the SDL2 libraries and a working CGO installation (see below for more information).
+
 ## First time setup of SDL2 on Windows
 
 1. Install choco.

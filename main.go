@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/hculpan/gosdl/keyboard"
 	"github.com/hculpan/gosdl/screen"
 	"github.com/veandco/go-sdl2/sdl"
@@ -18,7 +20,10 @@ const (
 
 func main() {
 	scr := screen.NewScreen(textCols, textRows)
-	scr.Show()
+	if err := scr.Show(); err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 	defer scr.CleanUp()
 	k := keyboard.NewKeyboard()
 

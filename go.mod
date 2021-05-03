@@ -1,5 +1,5 @@
 module github.com/hculpan/gosdl
 
-go 1.15
+go 1.16
 
 require github.com/veandco/go-sdl2 v0.4.5
