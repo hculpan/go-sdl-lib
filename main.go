@@ -3,143 +3,49 @@ package main
 import (
 	"fmt"
 
-	"github.com/hculpan/gosdl/keyboard"
-	"github.com/hculpan/gosdl/screen"
+	"github.com/hculpan/gosdl/component"
+	"github.com/hculpan/gosdl/game"
+	"github.com/hculpan/gosdl/pages"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 const (
-	textCols = 80
-	textRows = 26
-)
-
-const (
-	down = sdl.KEYDOWN
-	up   = sdl.KEYUP
+	gameeenWidth  = 1600
+	gameeenHeight = 1024
 )
 
 func main() {
-	scr := screen.NewScreen(textCols, textRows)
-	if err := scr.Show(); err != nil {
+	setup()
+
+	game := game.NewGame(gameeenWidth, gameeenHeight, "GoSDL")
+	if err := game.Show(); err != nil {
 		fmt.Println(err.Error())
 		return
 	}
-	defer scr.CleanUp()
-	k := keyboard.NewKeyboard()
-
-	sendDownKey(keyboard.LeftShift, scr, k)
-	sendDownUpKey('h', scr, k)
-	sendUpKey(keyboard.LeftShift, scr, k)
-	sendDownUpKey('e', scr, k)
-	sendDownUpKey('l', scr, k)
-	sendDownUpKey('l', scr, k)
-	sendDownUpKey('o', scr, k)
-	sendDownUpKey(keyboard.Enter, scr, k)
-	sendDownKey(keyboard.RightShift, scr, k)
-	sendDownUpKey('h', scr, k)
-	sendUpKey(keyboard.RightShift, scr, k)
-	sendDownUpKey('e', scr, k)
-	sendDownUpKey('l', scr, k)
-	sendDownUpKey('l', scr, k)
-	sendDownUpKey('o', scr, k)
-	for i := 0; i < 50; i++ {
-		sendDownUpKey(keyboard.Backspace, scr, k)
-	}
-	sendDownKey(keyboard.LeftShift, scr, k)
-	sendDownUpKey('g', scr, k)
-	sendUpKey(keyboard.LeftShift, scr, k)
-	sendDownUpKey('o', scr, k)
-	sendDownUpKey('o', scr, k)
-	sendDownUpKey('d', scr, k)
-	sendDownUpKey('b', scr, k)
-	sendDownUpKey('y', scr, k)
-	sendDownUpKey('e', scr, k)
-	sendDownUpKey(keyboard.Enter, scr, k)
-	sendDownKey(keyboard.RightShift, scr, k)
-	sendDownUpKey('t', scr, k)
-	sendUpKey(keyboard.RightShift, scr, k)
-	sendDownUpKey('h', scr, k)
-	sendDownUpKey('i', scr, k)
-	sendDownUpKey('s', scr, k)
-	sendDownUpKey(' ', scr, k)
-	sendDownUpKey('i', scr, k)
-	sendDownUpKey('s', scr, k)
-	sendDownUpKey(' ', scr, k)
-	sendDownUpKey('a', scr, k)
-	sendDownUpKey(' ', scr, k)
-	sendDownUpKey('t', scr, k)
-	sendDownUpKey('e', scr, k)
-	sendDownUpKey('s', scr, k)
-	sendDownUpKey('t', scr, k)
-	sendDownKey(keyboard.RightShift, scr, k)
-	sendDownUpKey('1', scr, k)
-	sendUpKey(keyboard.RightShift, scr, k)
-	sendDownUpKey(keyboard.Enter, scr, k)
+	defer game.CleanUp()
+	defer cleanup()
 
 	for {
-		event := sdl.WaitEvent()
-		switch event.(type) {
-		case *sdl.QuitEvent:
-			return
-		case *sdl.KeyboardEvent:
-			keycode := sdl.GetKeyFromScancode(event.(*sdl.KeyboardEvent).Keysym.Scancode)
-			if event.(*sdl.KeyboardEvent).Type == sdl.KEYDOWN {
-				switch keycode {
-				case sdl.K_HOME:
-					sendEscSequence("[H", scr)
-				case sdl.K_INSERT:
-					sendEscSequence("[2J", scr)
-				case sdl.K_UP:
-					sendEscSequence("[1A", scr)
-				case sdl.K_DOWN:
-					sendEscSequence("[1B", scr)
-				case sdl.K_RIGHT:
-					sendEscSequence("[1C", scr)
-				case sdl.K_LEFT:
-					sendEscSequence("[1D", scr)
-				case sdl.K_ESCAPE:
+		event := sdl.PollEvent()
+		if event != nil {
+			switch event := event.(type) {
+			case *sdl.QuitEvent:
+				return
+			case *sdl.KeyboardEvent:
+				keycode := sdl.GetKeyFromScancode(event.Keysym.Scancode)
+				if event.Type == sdl.KEYDOWN && keycode == sdl.K_ESCAPE {
 					return
-				default:
-					r := k.ProcessKeyInput(keyboard.NewKeyInputFromEvent(event.(*sdl.KeyboardEvent)))
-					if r != 0 {
-						scr.ProcessRune(r)
-					}
-				}
-			} else {
-				r := k.ProcessKeyInput(keyboard.NewKeyInputFromEvent(event.(*sdl.KeyboardEvent)))
-				if r != 0 {
-					scr.ProcessRune(r)
 				}
 			}
 		}
-
+		game.DrawScreen()
 	}
 }
 
-func buildKey(r rune, keyAction uint32) *keyboard.KeyInput {
-	return &keyboard.KeyInput{Key: r, Type: keyAction}
+func setup() {
+	component.RegisterPage(pages.NewMainPage("MainPage", 0, 0, gameeenWidth, gameeenHeight))
 }
 
-func sendDownUpKey(r rune, scr *screen.Screen, k *keyboard.Keyboard) {
-	newrune := k.ProcessKeyInput(buildKey(r, down))
-	scr.ProcessRune(newrune)
-	newrune = k.ProcessKeyInput(buildKey(r, up))
-	scr.ProcessRune(newrune)
-}
+func cleanup() {
 
-func sendDownKey(r rune, scr *screen.Screen, k *keyboard.Keyboard) {
-	newrune := k.ProcessKeyInput(buildKey(r, down))
-	scr.ProcessRune(newrune)
-}
-
-func sendUpKey(r rune, scr *screen.Screen, k *keyboard.Keyboard) {
-	newrune := k.ProcessKeyInput(buildKey(r, up))
-	scr.ProcessRune(newrune)
-}
-
-func sendEscSequence(s string, scr *screen.Screen) {
-	scr.ProcessRune(keyboard.Escape)
-	for _, v := range s {
-		scr.ProcessRune(v)
-	}
 }
