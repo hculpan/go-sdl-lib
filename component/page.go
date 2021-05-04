@@ -2,15 +2,14 @@ package component
 
 import (
 	"fmt"
-
-	"github.com/veandco/go-sdl2/sdl"
 )
 
 type Page interface {
 	Component
-	Name() string
 
-	DrawPage(renderer *sdl.Renderer) error
+	GetName() string
+	PageLoad() error
+	PageUnload() error
 }
 
 var ActivePage Page
@@ -18,7 +17,7 @@ var ActivePage Page
 var pages = make(map[string]Page)
 
 func RegisterPage(p Page) {
-	pages[p.Name()] = p
+	pages[p.GetName()] = p
 	if ActivePage == nil {
 		ActivePage = p
 	}
@@ -29,9 +28,18 @@ func GetPage(name string) Page {
 }
 
 func SwitchPage(newPage string) {
+	if ActivePage != nil {
+		if err := ActivePage.PageUnload(); err != nil {
+			panic(err)
+		}
+	}
+
 	p := GetPage(newPage)
 	if p == nil {
 		panic(fmt.Sprintf("No page defined for '%s'", newPage))
+	} else if err := p.PageLoad(); err != nil {
+		panic(err)
 	}
+
 	ActivePage = p
 }

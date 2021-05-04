@@ -88,5 +88,5 @@ func (s *Window) Show() error {
 
 // DrawScreen draws the active page
 func (s *Window) DrawScreen() error {
-	return ActivePage.DrawPage(s.renderer)
+	return ActivePage.Draw(s.renderer)
 }

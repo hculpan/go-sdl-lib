@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 
+	"github.com/hculpan/gosdl/app"
+	"github.com/hculpan/gosdl/app/pages"
 	"github.com/hculpan/gosdl/component"
 	"github.com/hculpan/gosdl/game"
-	"github.com/hculpan/gosdl/pages"
 )
 
 const (
@@ -26,5 +27,5 @@ func Setup() game.Game {
 	component.RegisterPage(pages.NewMainPage("MainPage", 0, 0, int(gameWidth), int(gameHeight)))
 	component.RegisterPage(pages.NewRedPage("RedPage", 0, 0, int(gameWidth), int(gameHeight)))
 
-	return &pages.MyGame{}
+	return &app.MyGame{}
 }

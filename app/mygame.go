@@ -1,4 +1,4 @@
-package pages
+package app
 
 import (
 	"github.com/hculpan/gosdl/component"
