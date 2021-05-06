@@ -1,10 +1,13 @@
 package app
 
 import (
+	"github.com/hculpan/gosdl/app/pages"
 	"github.com/hculpan/gosdl/component"
 )
 
 type MyGame struct {
+	component.BaseGame
+
 	cycle       int
 	currentPage int
 }
@@ -13,6 +16,22 @@ const (
 	BLACK_PAGE = iota
 	RED_PAGE
 )
+
+func NewMyGame(gameWidth, gameHeight int32) *MyGame {
+	result := &MyGame{}
+
+	result.Initialize(gameWidth, gameHeight)
+	result.RegisterPages(result.LoadPages())
+
+	return result
+}
+
+func (g *MyGame) LoadPages() []component.Page {
+	return []component.Page{
+		pages.NewMainPage("MainPage", 0, 0, g.GameWidth, g.GameHeight),
+		pages.NewRedPage("RedPage", 0, 0, g.GameWidth, g.GameHeight),
+	}
+}
 
 func (g *MyGame) Update() error {
 	g.cycle += 1

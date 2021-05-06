@@ -17,11 +17,13 @@ type Window struct {
 	window   *sdl.Window
 	renderer *sdl.Renderer
 	font     *ttf.Font
+
+	Background sdl.Color
 }
 
 // NewWindow creates a new Window object
-func NewWindow(width int, height int, title string) *Window {
-	return &Window{Width: int32(width), Height: int32(height), Title: title}
+func NewWindow(width, height int32, title string, background sdl.Color) *Window {
+	return &Window{Width: int32(width), Height: int32(height), Title: title, Background: background}
 }
 
 func (s *Window) Setup() error {
@@ -88,5 +90,11 @@ func (s *Window) Show() error {
 
 // DrawScreen draws the active page
 func (s *Window) DrawScreen() error {
-	return ActivePage.Draw(s.renderer)
+	s.renderer.SetDrawColor(s.Background.R, s.Background.G, s.Background.B, s.Background.A)
+	s.renderer.Clear()
+	if err := ActivePage.Draw(s.renderer); err != nil {
+		panic(err)
+	}
+	s.renderer.Present()
+	return nil
 }

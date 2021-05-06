@@ -4,28 +4,27 @@ import (
 	"fmt"
 
 	"github.com/hculpan/gosdl/app"
-	"github.com/hculpan/gosdl/app/pages"
 	"github.com/hculpan/gosdl/component"
 	"github.com/hculpan/gosdl/game"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 const (
-	gameWidth  = 1600
-	gameHeight = 1024
+	gameWidth  int32 = 1600
+	gameHeight       = 1024
 )
 
 func main() {
-	game := game.NewGameController(component.NewWindow(gameWidth, gameHeight, "GoSDL"), Setup())
-	Setup()
+	// TODO: Set to the desired default window background
+	windowBackground := sdl.Color{R: 255, G: 255, B: 255, A: 255}
+
+	game := game.NewGameController(component.NewWindow(gameWidth, gameHeight, "GoSDL", windowBackground), GetGame())
 	if err := game.Run(); err != nil {
 		fmt.Println(err.Error())
 	}
 }
 
 // TODO: Must update this with specific setup for game
-func Setup() game.Game {
-	component.RegisterPage(pages.NewMainPage("MainPage", 0, 0, int(gameWidth), int(gameHeight)))
-	component.RegisterPage(pages.NewRedPage("RedPage", 0, 0, int(gameWidth), int(gameHeight)))
-
-	return &app.MyGame{}
+func GetGame() game.Game {
+	return app.NewMyGame(gameWidth, gameHeight)
 }

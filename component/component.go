@@ -8,5 +8,9 @@ type Component interface {
 	Position() (int32, int32)
 	Size() (int32, int32)
 
+	AddChild(Component)
+	RemoveChild(int)
+
 	Draw(r *sdl.Renderer) error
+	DrawComponent(r *sdl.Renderer) error
 }
