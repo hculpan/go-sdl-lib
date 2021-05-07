@@ -1,7 +1,7 @@
 package components
 
 import (
-	"github.com/hculpan/gosdl/component"
+	"github.com/hculpan/go-sdl-lib/component"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/hculpan/gosdl/app/pages"
-	"github.com/hculpan/gosdl/component"
+	"github.com/hculpan/go-sdl-lib/app/pages"
+	"github.com/hculpan/go-sdl-lib/component"
 )
 
 type MyGame struct {

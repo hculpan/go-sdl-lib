@@ -1,4 +1,4 @@
-module github.com/hculpan/gosdl
+module github.com/hculpan/go-sdl-lib
 
 go 1.16
 

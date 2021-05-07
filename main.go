@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/hculpan/gosdl/app"
-	"github.com/hculpan/gosdl/component"
-	"github.com/hculpan/gosdl/game"
+	"github.com/hculpan/go-sdl-lib/app"
+	"github.com/hculpan/go-sdl-lib/component"
+	"github.com/hculpan/go-sdl-lib/game"
 	"github.com/veandco/go-sdl2/sdl"
 )
 

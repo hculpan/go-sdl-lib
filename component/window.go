@@ -3,7 +3,7 @@ package component
 import (
 	"fmt"
 
-	"github.com/hculpan/gosdl/static"
+	"github.com/hculpan/go-sdl-lib/static"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
 )
