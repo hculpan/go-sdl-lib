@@ -18,6 +18,11 @@ func main() {
 	// TODO: Set to the desired default window background
 	windowBackground := sdl.Color{R: 255, G: 255, B: 255, A: 255}
 
+	if err := component.SetupSDL(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
 	game := game.NewGameController(component.NewWindow(gameWidth, gameHeight, "GoSDL", windowBackground), GetGame())
 	if err := game.Run(); err != nil {
 		fmt.Println(err.Error())

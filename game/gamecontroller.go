@@ -35,10 +35,8 @@ func (g *GameController) Cleanup() {
 
 func (g *GameController) Run() error {
 	g.Setup()
-	if err := g.window.Setup(); err != nil {
-		return err
-	}
 	defer g.Cleanup()
+
 	if err := g.window.Show(); err != nil {
 		return err
 	}

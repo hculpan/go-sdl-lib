@@ -3,9 +3,7 @@ package component
 import (
 	"fmt"
 
-	"github.com/hculpan/go-sdl-lib/static"
 	"github.com/veandco/go-sdl2/sdl"
-	"github.com/veandco/go-sdl2/ttf"
 )
 
 // Window represents the main object to display text output
@@ -16,7 +14,6 @@ type Window struct {
 
 	window   *sdl.Window
 	renderer *sdl.Renderer
-	font     *ttf.Font
 
 	Background sdl.Color
 }
@@ -26,19 +23,9 @@ func NewWindow(width, height int32, title string, background sdl.Color) *Window 
 	return &Window{Width: int32(width), Height: int32(height), Title: title, Background: background}
 }
 
-func (s *Window) Setup() error {
+func SetupSDL() error {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		fmt.Println("Initializing SDL: ", err)
-		return err
-	}
-
-	if err := ttf.Init(); err != nil {
-		fmt.Println("Initializing SDL: ", err)
-		return err
-	}
-
-	if err := s.initializeFonts(); err != nil {
-		fmt.Println("Initializing fonts: ", err)
 		return err
 	}
 
@@ -47,19 +34,8 @@ func (s *Window) Setup() error {
 
 // CleanUp cleans up all the resources creates by the Window object
 func (s *Window) CleanUp() {
-	s.font.Close()
 	s.renderer.Destroy()
 	s.window.Destroy()
-}
-
-func (s *Window) initializeFonts() error {
-	font, err := static.InitializeFont("OldComputerManualMonospaced-KmlZ.ttf")
-	if err != nil {
-		return err
-	}
-	s.font = font
-
-	return nil
 }
 
 // Show initializes the main Window and shows it
