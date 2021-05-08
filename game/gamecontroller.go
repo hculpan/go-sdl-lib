@@ -6,23 +6,20 @@ import (
 )
 
 type GameController struct {
-	width  int
-	height int
+	Game Game
 
-	game Game
-
-	window *component.Window
+	Window *component.Window
 }
 
 func NewGameController(window *component.Window, game Game) GameController {
-	return GameController{width: int(window.Width), height: int(window.Height), window: window, game: game}
+	return GameController{Window: window, Game: game}
 }
 
 func (g *GameController) Setup() {
 }
 
 func (g *GameController) DrawFrame() error {
-	return g.window.DrawScreen()
+	return g.Window.DrawScreen()
 }
 
 func (g *GameController) Update() error {
@@ -30,14 +27,14 @@ func (g *GameController) Update() error {
 }
 
 func (g *GameController) Cleanup() {
-	g.window.CleanUp()
+	g.Window.CleanUp()
 }
 
 func (g *GameController) Run() error {
 	g.Setup()
 	defer g.Cleanup()
 
-	if err := g.window.Show(); err != nil {
+	if err := g.Window.Show(); err != nil {
 		return err
 	}
 
@@ -56,11 +53,11 @@ func (g *GameController) Run() error {
 			}
 		}
 
-		if err := g.game.Update(); err != nil {
+		if err := g.Game.Update(); err != nil {
 			return err
 		}
 
-		if err := g.window.DrawScreen(); err != nil {
+		if err := g.Window.DrawScreen(); err != nil {
 			return err
 		}
 	}

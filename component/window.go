@@ -34,8 +34,13 @@ func SetupSDL() error {
 
 // CleanUp cleans up all the resources creates by the Window object
 func (s *Window) CleanUp() {
-	s.renderer.Destroy()
-	s.window.Destroy()
+	if s.renderer != nil {
+		s.renderer.Destroy()
+	}
+
+	if s.window != nil {
+		s.window.Destroy()
+	}
 }
 
 // Show initializes the main Window and shows it
