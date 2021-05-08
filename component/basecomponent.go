@@ -36,14 +36,14 @@ func (c *BaseComponent) SetSize(width, height int32) {
 // It will call the Draw() method on the children first, and then
 // call the DrawComponent() on the current component.
 func (c *BaseComponent) DrawWithChildren(r *sdl.Renderer, f func(*sdl.Renderer) error) error {
+	if err := f(r); err != nil {
+		return err
+	}
+
 	for _, child := range c.Children {
 		if err := child.Draw(r); err != nil {
 			return err
 		}
-	}
-
-	if err := f(r); err != nil {
-		return err
 	}
 
 	return nil
