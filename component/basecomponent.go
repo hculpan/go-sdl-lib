@@ -31,31 +31,23 @@ func (c *BaseComponent) SetSize(width, height int32) {
 	c.Height = height
 }
 
-// DrawWithChildren is a method that should be called by all
-// classes that implement the Component interface
-// It will call the Draw() method on the children first, and then
-// call the DrawComponent() on the current component.
-func (c *BaseComponent) DrawWithChildren(r *sdl.Renderer, f func(*sdl.Renderer) error) error {
-	if err := f(r); err != nil {
-		return err
-	}
-
-	for _, child := range c.Children {
-		if err := child.Draw(r); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 func (c *BaseComponent) DrawComponent(r *sdl.Renderer) error {
 	return nil
 }
 
+func callDrawComponent(c Component, r *sdl.Renderer) error {
+	return c.DrawComponent(r)
+}
+
 func (c *BaseComponent) Draw(r *sdl.Renderer) error {
-	if err := c.DrawWithChildren(r, c.DrawComponent); err != nil {
+	if err := callDrawComponent(c, r); err != nil {
 		return err
+	}
+
+	for _, child := range c.Children {
+		if err := callDrawComponent(child, r); err != nil {
+			return err
+		}
 	}
 
 	return nil
