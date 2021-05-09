@@ -7,6 +7,8 @@ import (
 	"github.com/veandco/go-sdl2/sdl"
 )
 
+var MainWindow Window
+
 // Window represents the main object to display text output
 type Window struct {
 	Width  int32

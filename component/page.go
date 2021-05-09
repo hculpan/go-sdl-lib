@@ -14,9 +14,9 @@ type Page interface {
 	Quit() bool
 }
 
-var ActivePage Page
-
 var pages = make(map[string]Page)
+
+var ActivePage Page
 
 func RegisterPage(p Page) {
 	pages[p.GetName()] = p
