@@ -1,4 +1,4 @@
-# GoSDL
+# Go SDL Lib
 This project is basically a starting point for me to do SDL2-based projects in Go.
 
 The plan is to follow a basic framework:
@@ -8,4 +8,6 @@ The plan is to follow a basic framework:
 * A component (including Page) can contain child components, and it will be responsible
   for doing the following:
     * Calling each child component on each frame to draw it's portion of the screen
-    * Calling each child component with any messages that it may have to handle
+    * Calling each child component with any messages/events that it may have to handle
+
+This framework is written specifically for me and the way I approach projects, so I've made many choices and compromises that work for me.  For example, because of the amount of work that would be required to do otherwise, components all use absolute screen position, not relative to their parent.  So a component's drawing function must take into account the component's position or it will draw outside it's bounds.  Another example: Events that are handled are limited, and mostly driven by what I tend to use.
