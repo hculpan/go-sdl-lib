@@ -10,7 +10,15 @@ type Component interface {
 
 	AddChild(Component)
 	RemoveChild(int)
+	GetChildren() []Component
 
 	Draw(r *sdl.Renderer) error
 	DrawComponent(r *sdl.Renderer) error
+
+	KeyEvent(event *sdl.KeyboardEvent) bool
+	MouseButtonEvent(event *sdl.MouseButtonEvent) bool
+
+	IsPointInComponent(x, y int32) bool
 }
+
+type OnActionFunc func()

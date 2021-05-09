@@ -13,6 +13,70 @@ type BaseComponent struct {
 	Children []Component
 }
 
+/**************************************
+* Boiletplate functions
+*
+* All components should include these
+***************************************/
+
+func (c *BaseComponent) KeyEvent(event *sdl.KeyboardEvent) bool {
+	return PassKeyEventToChildren(event, c.Children)
+}
+
+func (c *BaseComponent) Draw(r *sdl.Renderer) error {
+	return DrawParentAndChildren(r, c)
+}
+
+func (c *BaseComponent) MouseButtonEvent(event *sdl.MouseButtonEvent) bool {
+	if c.IsPointInComponent(event.X, event.Y) {
+		return PassMouseButtonEventToChildren(event, c.Children)
+	}
+
+	return false
+}
+
+/**************************************
+* End boilerplate functions
+***************************************/
+
+func PassKeyEventToChildren(event *sdl.KeyboardEvent, children []Component) bool {
+	for _, child := range children {
+		if child.KeyEvent(event) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func DrawParentAndChildren(r *sdl.Renderer, c Component) error {
+	if err := c.DrawComponent(r); err != nil {
+		return err
+	}
+
+	for _, child := range c.GetChildren() {
+		if err := child.Draw(r); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func PassMouseButtonEventToChildren(event *sdl.MouseButtonEvent, children []Component) bool {
+	for _, child := range children {
+		if child.IsPointInComponent(event.X, event.Y) && child.MouseButtonEvent(event) {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (c BaseComponent) IsPointInComponent(x, y int32) bool {
+	return x >= c.X && x <= c.Width+c.X && y >= c.Y && y <= c.Height+c.Y
+}
+
 func (c BaseComponent) Position() (int32, int32) {
 	return c.X, c.Y
 }
@@ -35,22 +99,8 @@ func (c *BaseComponent) DrawComponent(r *sdl.Renderer) error {
 	return nil
 }
 
-func callDrawComponent(c Component, r *sdl.Renderer) error {
-	return c.DrawComponent(r)
-}
-
-func (c *BaseComponent) Draw(r *sdl.Renderer) error {
-	if err := callDrawComponent(c, r); err != nil {
-		return err
-	}
-
-	for _, child := range c.Children {
-		if err := callDrawComponent(child, r); err != nil {
-			return err
-		}
-	}
-
-	return nil
+func (c BaseComponent) GetChildren() []Component {
+	return c.Children
 }
 
 func (c *BaseComponent) AddChild(comp Component) {

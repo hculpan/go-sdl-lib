@@ -31,7 +31,7 @@ func (c *RectangleComponent) DrawComponent(r *sdl.Renderer) error {
 }
 
 func (c *RectangleComponent) Draw(r *sdl.Renderer) error {
-	if err := c.DrawWithChildren(r, c.DrawComponent); err != nil {
+	if err := component.DrawParentAndChildren(r, c); err != nil {
 		return err
 	}
 

@@ -3,6 +3,7 @@ package component
 import (
 	"fmt"
 
+	"github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -26,6 +27,11 @@ func NewWindow(width, height int32, title string, background sdl.Color) *Window 
 func SetupSDL() error {
 	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
 		fmt.Println("Initializing SDL: ", err)
+		return err
+	}
+
+	if err := img.Init(img.INIT_PNG); err != nil {
+		fmt.Println("Initializing IMG: ", err)
 		return err
 	}
 

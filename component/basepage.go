@@ -17,3 +17,7 @@ func (p *BasePage) PageLoad() error {
 func (p *BasePage) PageUnload() error {
 	return nil
 }
+
+func (p *BasePage) Quit() bool {
+	return true
+}

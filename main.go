@@ -11,7 +11,7 @@ import (
 
 const (
 	gameWidth  int32 = 1600
-	gameHeight       = 1024
+	gameHeight int32 = 1024
 )
 
 func main() {
@@ -23,7 +23,9 @@ func main() {
 		return
 	}
 
-	game := game.NewGameController(component.NewWindow(gameWidth, gameHeight, "GoSDL", windowBackground), GetGame())
+	game := game.NewGameController(
+		component.NewWindow(gameWidth, gameHeight, "GoSDL", windowBackground),
+		GetGame())
 	if err := game.Run(); err != nil {
 		fmt.Println(err.Error())
 	}

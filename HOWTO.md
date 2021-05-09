@@ -4,7 +4,12 @@ The purpose of this library/framework is to form the foundation for developing a
 
 # main.go
 
-The changes here are pretty minimal.  If you desire a default window background color other than white, you'll need to change the assignment to `windowBackground`.  Otherwise, change the `GetGame()` function to instantiate your custom game object (see below).
+You can do whatever is needed here, but to work with the library you should do the following at a minimum:
+1. Call `component.SetupSDL()` to initialize the SDL library
+2. Create a `component.Window` (this could be done in the game controller)
+3. Create a game instance (this could also be done in the game controller)
+4. Create a game controller instance
+5. call `Run()` on the game controller 
 
 # App folder
 
@@ -12,6 +17,10 @@ The intention is that all application-specific source files will go in this dire
 * components - for custom components
 * pages - for page objects
 The application's game object can go in the root `app` folder.
+
+# GameController
+
+The game controller is the object that manages the game model and the game interface.  Developers should create their own game controller, but it should extend the GameController.  The only thing that the developer needs to do is provide a factory method to instantiate the game controller, giving it the game and window object.  In addition, the game controller should register all the pages that will be needed in the game.  The rest of the controller logic (specifically the basic game loop) will be provided by the library's GameController.
 
 # Game
 
@@ -45,12 +54,20 @@ A component is the basic building block of the application.  A Page (which is a 
 
 It is up to the developer to decide how big or little a component is.  A Page could have only a single component that draws everything, or every UI element could be its own component.  The framework does not require either approach to be used.
 
-The basic method for drawing a component is the `Draw()`.  However, in general, classes implementing `Component` should provide a boilerplate `Draw()` implementation that calls `BaseComponent.DrawWithChildren()`.  This will then call all child `Draw()` methods and the component's `DrawComponent()`, which should actually handle the component's drawing logic.  For components with no children, following this same pattern is recommended, but the developer may choose to provide their own implementation of `Draw()`; this is the only method called directly by the framework.
+The basic method for drawing a component is the `Draw()`.  However, in general, classes that derive from `BaseComponent` should provide a boilerplate implementationof this method (see example in `RectangleComponent.go`).  Instead, the developer should put his actual drawing logic in `DrawComponent()`.  The boilerplate `Draw()` method will call the `DrawComponent()`, and then call the `Draw()` on any children.  In this way, the parent will draw first, and the children will draw after so that they are on top of the parent component.  The order that the will draw is the order in which they are added to the parent during initialization, so if they overlap, the later children will overlay on top of the earlier child components.
 
 ## BaseComponent
 
 This is intended to be the base of components, and handles the common functionality of all components:
 * It contains members for location and size (X, Y, Width, Height)
 * It conatins a list of child components
-* Using the `DrawWithChildren()` method, it calls the `Draw()` method on all child components
-    * Each components `Draw()` method should call `BaseComponent.DrawWithChildren()`, and this will call each child's `Draw()` method and then the component's `DrawComponent()`
+
+# Fonts
+
+The library provides a class to manage fonts of type `FontsManager`.  It can be accessed globally using the global variable `resources.Fonts`.  
+
+To use the font manager, the developer should first initialize the font manager by calling `resources.FontsInits`, passing in a reference to the `embed.FS` instance of the embedded fonts (currently `FontsManager` only supports embedded fonts using Go's 1.16+ `embed` package).  This can be done anytime after `component.SetupSDL()` is called.
+
+The developer should then indicate which fonts they will use by calling `resources.Fonts.RegisterFont()`, passing in a key name, the full filename of the font (including relative path from root of the project), and the font size.  The key can be any arbitrary string the developer chooses, but something like `"Arial-18"` that indicates both the font and size is recommended.  Note that the same font used at different sizes will have to be registered for each size.  The font does not need to be registered at the launch of the application, though it may be convenient to do so; it only needs to be registered before first use.  Once registered, the same font/size combination will remain in memory for the life of the application.
+
+To use a font, you can simply call `resources.Fonts.GetFont()`, passing in the key name.  Or you can render a font to a texture by calling `resources.Fonts.CreateTexture()`, passing in the message to render and the color.  Use the `Query()` method on the resultant texture to determine the size of the rendered text.

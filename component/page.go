@@ -10,6 +10,8 @@ type Page interface {
 	GetName() string
 	PageLoad() error
 	PageUnload() error
+
+	Quit() bool
 }
 
 var ActivePage Page

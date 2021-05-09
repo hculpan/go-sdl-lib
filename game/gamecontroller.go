@@ -44,12 +44,18 @@ func (g *GameController) Run() error {
 		if event != nil {
 			switch event := event.(type) {
 			case *sdl.QuitEvent:
-				running = false
+				running = !component.ActivePage.Quit()
 			case *sdl.KeyboardEvent:
 				keycode := sdl.GetKeyFromScancode(event.Keysym.Scancode)
-				if event.Type == sdl.KEYDOWN && keycode == sdl.K_ESCAPE {
-					running = false
+				if event.Type == sdl.KEYDOWN {
+					if keycode == sdl.K_ESCAPE {
+						running = !component.ActivePage.Quit()
+					} else {
+						component.ActivePage.KeyEvent(event)
+					}
 				}
+			case *sdl.MouseButtonEvent:
+				component.ActivePage.MouseButtonEvent(event)
 			}
 		}
 
