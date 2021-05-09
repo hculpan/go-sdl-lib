@@ -71,3 +71,11 @@ To use the font manager, the developer should first initialize the font manager 
 The developer should then indicate which fonts they will use by calling `resources.Fonts.RegisterFont()`, passing in a key name, the full filename of the font (including relative path from root of the project), and the font size.  The key can be any arbitrary string the developer chooses, but something like `"Arial-18"` that indicates both the font and size is recommended.  Note that the same font used at different sizes will have to be registered for each size.  The font does not need to be registered at the launch of the application, though it may be convenient to do so; it only needs to be registered before first use.  Once registered, the same font/size combination will remain in memory for the life of the application.
 
 To use a font, you can simply call `resources.Fonts.GetFont()`, passing in the key name.  Or you can render a font to a texture by calling `resources.Fonts.CreateTexture()`, passing in the message to render and the color.  Use the `Query()` method on the resultant texture to determine the size of the rendered text.
+
+# Event handling
+
+The component library is capable of handling keyboard and mouse events and routing them to the responsible component.
+
+For keyboard events, the framework will pass the event to the page, which will then pass to all contained components, which should then pass to their child component, on down the tree.  This will stop as soon as one component returns `true` from the `KeyEvent()` method.
+
+For mouse up/down events, this will similarly be passed from parent to child events, except that it will first check if the event occurred within the bounds of the components.  If it did not, then the event will not be sent to the child.  Note that, as of this writing, both up and down events are passed, so a component will receive two messages for each button click.  It is up to the component to pick which event to actually trigger the functionality, though in general it is recommended on the up event.
