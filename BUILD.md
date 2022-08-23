@@ -6,6 +6,10 @@ This project requires Go 1.16+ (it uses the 'embed' package which was introduced
 
 It will require a valid install of the SDL2 libraries and a working CGO installation (see below for more information).
 
+## First time setup on Macos M1
+1. Install SDL2 using Homebrew
+2. Make sure the go-sdl2 libraries are updated
+
 ## First time setup of SDL2 on Windows
 
 1. Install choco.
@@ -23,3 +27,6 @@ You can also build it using the static tag:
     `go build -tags static`
 To build it as a Windows executable:
     `go build -tags static -ldflags -H=windowsgui`
+To build on Mac:
+    ` CGO_ENABLED=1 CC=clang GOOS=darwin GOARCH=amd64 go build -tags static -ldflags "-s -w"`
+(Note the above builds for Intel-based arch, not M1/Arm64, and it does a static compilationg.  While using the Arm64 architecture will compile if using dynamic linking, the app itself doesn't seem to work right.  And if using Arm64 with static linking, SDL2 will have a compilation error.)  
