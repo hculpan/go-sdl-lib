@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	gameWidth  int32 = 1600
-	gameHeight int32 = 1024
+	gameWidth  int32 = 800
+	gameHeight int32 = 600
 )
 
 func main() {
@@ -23,15 +23,16 @@ func main() {
 		return
 	}
 
+	w := component.NewWindow(gameWidth, gameHeight, "GoSDL", windowBackground)
 	game := game.NewGameController(
-		component.NewWindow(gameWidth, gameHeight, "GoSDL", windowBackground),
-		GetGame())
+		w,
+		GetGame(w.Width, w.Height))
 	if err := game.Run(); err != nil {
 		fmt.Println(err.Error())
 	}
 }
 
 // TODO: Must update this with specific setup for game
-func GetGame() game.Game {
-	return app.NewMyGame(gameWidth, gameHeight)
+func GetGame(w, h int32) game.Game {
+	return app.NewMyGame(w, h)
 }

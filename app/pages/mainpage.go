@@ -1,6 +1,8 @@
 package pages
 
 import (
+	"fmt"
+
 	"github.com/hculpan/go-sdl-lib/app/components"
 	"github.com/hculpan/go-sdl-lib/component"
 	"github.com/veandco/go-sdl2/sdl"
@@ -11,6 +13,7 @@ type MainPage struct {
 }
 
 func NewMainPage(name string, x, y, width, height int32) *MainPage {
+	fmt.Println("drawing main page")
 	p := MainPage{}
 	p.Name = "MainPage"
 	p.SetPosition(0, 0)

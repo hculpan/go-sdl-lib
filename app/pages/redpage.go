@@ -1,6 +1,8 @@
 package pages
 
 import (
+	"fmt"
+
 	"github.com/hculpan/go-sdl-lib/app/components"
 	"github.com/hculpan/go-sdl-lib/component"
 	"github.com/veandco/go-sdl2/sdl"
@@ -11,6 +13,7 @@ type RedPage struct {
 }
 
 func NewRedPage(name string, x, y, width, height int32) *RedPage {
+	fmt.Println("drawing red page")
 	p := RedPage{}
 	p.Name = "RedPage"
 	p.SetPosition(0, 0)

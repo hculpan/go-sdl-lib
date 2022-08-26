@@ -23,7 +23,9 @@ type Window struct {
 
 // NewWindow creates a new Window object
 func NewWindow(width, height int32, title string, background sdl.Color) *Window {
-	return &Window{Width: int32(width), Height: int32(height), Title: title, Background: background}
+	w := &Window{Width: int32(width), Height: int32(height), Title: title, Background: background}
+	w.Show()
+	return w
 }
 
 func SetupSDL() error {
@@ -53,13 +55,17 @@ func (s *Window) CleanUp() {
 
 // Show initializes the main Window and shows it
 func (s *Window) Show() error {
+	if s.window != nil {
+		return nil
+	}
+
 	window, err := sdl.CreateWindow(
 		s.Title,
 		sdl.WINDOWPOS_CENTERED,
 		sdl.WINDOWPOS_CENTERED,
 		int32(s.Width),
 		int32(s.Height),
-		sdl.WINDOW_OPENGL,
+		sdl.WINDOW_OPENGL|sdl.WINDOW_ALLOW_HIGHDPI,
 	)
 	if err != nil {
 		fmt.Println("Initializing window: ", err)
@@ -73,6 +79,9 @@ func (s *Window) Show() error {
 		return err
 	}
 	s.renderer = renderer
+	w, h, _ := renderer.GetOutputSize()
+	s.Width = w
+	s.Height = h
 
 	return nil
 }

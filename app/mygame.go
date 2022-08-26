@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/hculpan/go-sdl-lib/app/pages"
 	"github.com/hculpan/go-sdl-lib/component"
 )
@@ -34,8 +36,10 @@ func (g *MyGame) LoadPages() []component.Page {
 }
 
 func (g *MyGame) Update() error {
+	//	fmt.Printf("update called: %d\n", g.cycle)
 	g.cycle += 1
-	if g.cycle%5000 == 0 {
+	if g.cycle%60 == 0 {
+		fmt.Println("switching page")
 		switch g.currentPage {
 		case BLACK_PAGE:
 			component.SwitchPage("RedPage")
