@@ -11,9 +11,10 @@ var MainWindow Window
 
 // Window represents the main object to display text output
 type Window struct {
-	Width  int32
-	Height int32
-	Title  string
+	Width   int32
+	Height  int32
+	Title   string
+	Scaling float32
 
 	window   *sdl.Window
 	renderer *sdl.Renderer
@@ -59,6 +60,7 @@ func (s *Window) Show() error {
 		return nil
 	}
 
+	requestedWidth := s.Width
 	window, err := sdl.CreateWindow(
 		s.Title,
 		sdl.WINDOWPOS_CENTERED,
@@ -82,6 +84,7 @@ func (s *Window) Show() error {
 	w, h, _ := renderer.GetOutputSize()
 	s.Width = w
 	s.Height = h
+	Scaling = float32(w) / float32(requestedWidth)
 
 	return nil
 }

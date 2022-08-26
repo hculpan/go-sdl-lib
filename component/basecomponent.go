@@ -5,13 +5,14 @@ import (
 )
 
 type BaseComponent struct {
-	X      int32
-	Y      int32
-	Width  int32
-	Height int32
-
+	X        int32
+	Y        int32
+	Width    int32
+	Height   int32
 	Children []Component
 }
+
+var Scaling float32 = 1.0
 
 /**************************************
 * Boiletplate functions
@@ -28,6 +29,8 @@ func (c *BaseComponent) Draw(r *sdl.Renderer) error {
 }
 
 func (c *BaseComponent) MouseButtonEvent(event *sdl.MouseButtonEvent) bool {
+	event.X = int32(float32(event.X) * Scaling)
+	event.Y = int32(float32(event.Y) * Scaling)
 	if c.IsPointInComponent(event.X, event.Y) {
 		return PassMouseButtonEventToChildren(event, c.Children)
 	}
