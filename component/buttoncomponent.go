@@ -36,7 +36,7 @@ func NewButtonComponent(x, y, w, h int32, text string, backgroundColor sdl.Color
 	result.Text = text
 	result.OnAction = onAction
 
-	resources.Fonts.RegisterFont("Trueno-16", "built-in-fonts/Trueno.otf", 16)
+	resources.Fonts.RegisterFont("Trueno-16", "built-in-fonts/Trueno.otf", 32)
 
 	return &result
 }

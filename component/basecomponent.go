@@ -28,9 +28,13 @@ func (c *BaseComponent) Draw(r *sdl.Renderer) error {
 	return DrawParentAndChildren(r, c)
 }
 
-func (c *BaseComponent) MouseButtonEvent(event *sdl.MouseButtonEvent) bool {
+func (c *BaseComponent) BaseMouseButtonEvent(event *sdl.MouseButtonEvent) bool {
 	event.X = int32(float32(event.X) * Scaling)
 	event.Y = int32(float32(event.Y) * Scaling)
+	return c.MouseButtonEvent(event)
+}
+
+func (c *BaseComponent) MouseButtonEvent(event *sdl.MouseButtonEvent) bool {
 	if c.IsPointInComponent(event.X, event.Y) {
 		return PassMouseButtonEventToChildren(event, c.Children)
 	}

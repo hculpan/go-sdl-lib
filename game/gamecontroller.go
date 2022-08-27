@@ -55,7 +55,7 @@ func (g *GameController) Run() error {
 					}
 				}
 			case *sdl.MouseButtonEvent:
-				component.ActivePage.MouseButtonEvent(event)
+				component.ActivePage.BaseMouseButtonEvent(event)
 			}
 		}
 

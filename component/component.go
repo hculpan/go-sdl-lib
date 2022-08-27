@@ -17,6 +17,7 @@ type Component interface {
 
 	KeyEvent(event *sdl.KeyboardEvent) bool
 	MouseButtonEvent(event *sdl.MouseButtonEvent) bool
+	BaseMouseButtonEvent(event *sdl.MouseButtonEvent) bool
 
 	IsPointInComponent(x, y int32) bool
 }
