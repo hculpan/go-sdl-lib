@@ -5,6 +5,8 @@ import "github.com/veandco/go-sdl2/sdl"
 // Component is the base interface for all
 // components in this system
 type Component interface {
+	Initialize()
+
 	Position() (int32, int32)
 	Size() (int32, int32)
 
@@ -20,6 +22,9 @@ type Component interface {
 	BaseMouseButtonEvent(event *sdl.MouseButtonEvent) bool
 
 	IsPointInComponent(x, y int32) bool
+
+	IsVisible() bool
+	SetVisible(visible bool)
 }
 
 type OnActionFunc func()

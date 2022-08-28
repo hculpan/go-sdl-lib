@@ -28,6 +28,7 @@ type ButtonComponent struct {
 
 func NewButtonComponent(x, y, w, h int32, text string, backgroundColor sdl.Color, buttonColor sdl.Color, textColor sdl.Color, onAction OnActionFunc) *ButtonComponent {
 	result := ButtonComponent{buttonState: buttonUp}
+	result.Initialize()
 	result.SetPosition(x, y)
 	result.SetSize(w, h)
 	result.backgroundColor = backgroundColor

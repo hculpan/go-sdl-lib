@@ -1,12 +1,11 @@
-package components
+package component
 
 import (
-	"github.com/hculpan/go-sdl-lib/component"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 type RectangleComponent struct {
-	component.BaseComponent
+	BaseComponent
 
 	Background sdl.Color
 }
@@ -15,6 +14,7 @@ func NewRectangleComponent(x, y, width, height int32, background sdl.Color) *Rec
 	result := &RectangleComponent{
 		Background: background,
 	}
+	result.Initialize()
 
 	result.SetPosition(x, y)
 	result.SetSize(int32(width), int32(height))
@@ -31,7 +31,7 @@ func (c *RectangleComponent) DrawComponent(r *sdl.Renderer) error {
 }
 
 func (c *RectangleComponent) Draw(r *sdl.Renderer) error {
-	if err := component.DrawParentAndChildren(r, c); err != nil {
+	if err := DrawParentAndChildren(r, c); err != nil {
 		return err
 	}
 

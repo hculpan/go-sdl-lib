@@ -35,22 +35,11 @@ func NewLabelComponent(x, y, width, height int32, fontSize int, labelTextFunc La
 	labelConfig := NewLabelConfig()
 	labelConfig.FontSize = fontSize
 	return NewLabelComponentWithConfig(x, y, width, height, labelTextFunc, labelConfig)
-	/*
-	   result.SetPosition(x, y)
-	   result.SetSize(width, height)
-	   result.textFunc = labelTextFunc
-	   result.fontKey = resources.Fonts.GetKey("TruenoLight", fontSize)
-	   result.fontSize = fontSize
-	   result.justification = JUSTIFY_LEFT
-
-	   resources.Fonts.RegisterFont(result.fontKey, "built-in-fonts/TruenoLight.otf", fontSize)
-
-	   return result
-	*/
 }
 
 func NewLabelComponentWithConfig(x, y, width, height int32, labelTextFunc LabelTextFunc, labelConfig LabelConfig) *LabelComponent {
 	result := basicLabelComponent(x, y, width, height, labelTextFunc)
+	result.Initialize()
 	fontKey, err := registerFont(labelConfig.FontName, labelConfig.FontSize, labelConfig.FontFile)
 	if err != nil {
 		panic(err)

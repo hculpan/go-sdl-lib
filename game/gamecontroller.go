@@ -1,6 +1,8 @@
 package game
 
 import (
+	"math"
+
 	"github.com/hculpan/go-sdl-lib/component"
 	"github.com/veandco/go-sdl2/sdl"
 )
@@ -39,7 +41,9 @@ func (g *GameController) Run() error {
 	}
 
 	running := true
+	var start, end uint64
 	for running {
+		start = sdl.GetPerformanceCounter()
 		event := sdl.PollEvent()
 		if event != nil {
 			switch event := event.(type) {
@@ -65,6 +69,18 @@ func (g *GameController) Run() error {
 
 		if err := g.Window.DrawScreen(); err != nil {
 			return err
+		}
+
+		end = sdl.GetPerformanceCounter()
+		elapsed := (float64(end-start) / float64(sdl.GetPerformanceFrequency()))
+
+		elapsedMS := elapsed * 1000.0
+		delay := uint32(math.Floor(16.666 - elapsedMS))
+
+		// Cap to 60 FPS
+		if delay > 0 && delay < 17 {
+			sdl.Delay(delay)
+
 		}
 	}
 

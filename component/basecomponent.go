@@ -10,9 +10,14 @@ type BaseComponent struct {
 	Width    int32
 	Height   int32
 	Children []Component
+	Visible  bool
 }
 
 var Scaling float32 = 1.0
+
+func (c *BaseComponent) Initialize() {
+	c.Visible = true
+}
 
 /**************************************
 * Boiletplate functions
@@ -57,13 +62,15 @@ func PassKeyEventToChildren(event *sdl.KeyboardEvent, children []Component) bool
 }
 
 func DrawParentAndChildren(r *sdl.Renderer, c Component) error {
-	if err := c.DrawComponent(r); err != nil {
-		return err
-	}
-
-	for _, child := range c.GetChildren() {
-		if err := child.Draw(r); err != nil {
+	if c.IsVisible() {
+		if err := c.DrawComponent(r); err != nil {
 			return err
+		}
+
+		for _, child := range c.GetChildren() {
+			if err := child.Draw(r); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -82,6 +89,14 @@ func PassMouseButtonEventToChildren(event *sdl.MouseButtonEvent, children []Comp
 
 func (c BaseComponent) IsPointInComponent(x, y int32) bool {
 	return x >= c.X && x <= c.Width+c.X && y >= c.Y && y <= c.Height+c.Y
+}
+
+func (c BaseComponent) IsVisible() bool {
+	return c.Visible
+}
+
+func (c *BaseComponent) SetVisible(visible bool) {
+	c.Visible = visible
 }
 
 func (c BaseComponent) Position() (int32, int32) {

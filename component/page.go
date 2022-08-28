@@ -10,6 +10,8 @@ type Page interface {
 	GetName() string
 	PageLoad() error
 	PageUnload() error
+	SetData(data interface{})
+	GetData() interface{}
 
 	Quit() bool
 }
@@ -27,6 +29,12 @@ func RegisterPage(p Page) {
 
 func GetPage(name string) Page {
 	return pages[name]
+}
+
+func SwitchPageWithData(newPage string, data interface{}) {
+	SwitchPage(newPage)
+	ActivePage.SetData(data)
+	fmt.Println(ActivePage.GetData())
 }
 
 func SwitchPage(newPage string) {
