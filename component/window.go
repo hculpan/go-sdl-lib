@@ -93,9 +93,13 @@ func (s *Window) Show() error {
 func (s *Window) DrawScreen() error {
 	s.renderer.SetDrawColor(s.Background.R, s.Background.G, s.Background.B, s.Background.A)
 	s.renderer.Clear()
+
+	ActivePageWaitGroup.Wait()
+	ActivePageWaitGroup.Add(1)
 	if err := ActivePage.Draw(s.renderer); err != nil {
 		panic(err)
 	}
+	ActivePageWaitGroup.Done()
 	s.renderer.Present()
 	return nil
 }

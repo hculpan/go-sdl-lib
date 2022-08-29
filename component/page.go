@@ -2,6 +2,7 @@ package component
 
 import (
 	"fmt"
+	"sync"
 )
 
 type Page interface {
@@ -19,6 +20,7 @@ type Page interface {
 var pages = make(map[string]Page)
 
 var ActivePage Page
+var ActivePageWaitGroup sync.WaitGroup
 
 func RegisterPage(p Page) {
 	pages[p.GetName()] = p
@@ -34,10 +36,13 @@ func GetPage(name string) Page {
 func SwitchPageWithData(newPage string, data interface{}) {
 	SwitchPage(newPage)
 	ActivePage.SetData(data)
-	fmt.Println(ActivePage.GetData())
 }
 
 func SwitchPage(newPage string) {
+	ActivePageWaitGroup.Wait()
+	ActivePageWaitGroup.Add(1)
+	defer ActivePageWaitGroup.Done()
+
 	if ActivePage != nil {
 		if err := ActivePage.PageUnload(); err != nil {
 			panic(err)

@@ -80,7 +80,6 @@ func (g *GameController) Run() error {
 		// Cap to 60 FPS
 		if delay > 0 && delay < 17 {
 			sdl.Delay(delay)
-
 		}
 	}
 
